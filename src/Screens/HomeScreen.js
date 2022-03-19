@@ -1,64 +1,45 @@
-// Home.js
-import React, { useState, useEffect } from "react";
 import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  ActivityIndicator,
-} from "react-native";
-import List from "../Components/List";
-import SearchBar from "../Components/Searchbar";
+  Dimensions,
+  TextInput,
+  StatusBar,
+  Pressable,
+  Text
+} from 'react-native';
+import React, {useState} from 'react';
+import FilmsRow from '../Components/FilmsRow';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {ScrollView} from 'react-native-gesture-handler'
+const {width} = Dimensions.get('window');
 
-const Home = () => {
-  const [searchPhrase, setSearchPhrase] = useState("");
-  const [clicked, setClicked] = useState(false);
-  const [fakeData, setFakeData] = useState();
-
-  // get data from the fake api endpoint
-  useEffect(() => {
-    const getData = async () => {
-      const apiResponse = await fetch(
-        "https://my-json-server.typicode.com/kevintomas1995/logRocket_searchBar/languages"
-      );
-      const data = await apiResponse.json();
-      setFakeData(data);
-    };
-    getData();
-  }, []);
+const HomeScreen = ({navigation, route}) => {
 
   return (
-    <SafeAreaView style={styles.root}>
-      {!clicked && <Text style={styles.title}>Programming Languages</Text>}
-      <SearchBar
-        searchPhrase={searchPhrase}
-        setSearchPhrase={setSearchPhrase}
-        clicked={clicked}
-        setClicked={setClicked}
-      />
-      {!clicked && (
-          <List
-            searchPhrase={searchPhrase}
-            data={fakeData}
-            setClicked={setClicked}
-          />
-
-      )}
-    </SafeAreaView>
+    <SafeAreaProvider style={{backgroundColor: '#fff'}}>
+      <StatusBar backgroundColor="#fff" barStyle="light-content" />
+      <ScrollView >
+        <Pressable
+        onPress={()=>{navigation.navigate('Search')}}
+          style={{
+            justifyContent:'center',
+            alignSelf: 'center',
+            height: 45,
+            margin: 5,
+            marginVertical: 10,
+            backgroundColor: '#ededed',
+            width: width * 0.95,
+            borderRadius: 5,
+            padding: 10,
+          }}
+        >
+        <Text>Search Movie</Text>
+        </Pressable>
+        <FilmsRow title={'Top Rated'} query={'top_rated'} />
+        <FilmsRow title={'Popular'} query={'popular'} />
+        <FilmsRow title={'Up Coming'} query={'upcoming'} />
+        <FilmsRow title={'Now Playing'} query={'now_playing'} />
+      </ScrollView>
+    </SafeAreaProvider>
   );
 };
 
-export default Home;
-
-const styles = StyleSheet.create({
-  root: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    width: "100%",
-    marginTop: 20,
-    fontSize: 25,
-    fontWeight: "bold",
-    marginLeft: "10%",
-  },
-});
+export default HomeScreen;

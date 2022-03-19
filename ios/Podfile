@@ -12,6 +12,9 @@ target 'MoviX' do
     :hermes_enabled => false
   )
 
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'MoviXTests' do
     inherit! :complete
     # Pods for testing

@@ -1,9 +1,10 @@
-import {View, Text} from 'react-native';
+import {Dimensions} from 'react-native';
 import React from 'react';
-import HomeScreen from './Screens/HomeScreen';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {FavoriteScreen, WatchlistScreen} from './Screens/FavoritesScreen';
+import HomeScreen from './Screens/HomeScreen';
 import SearchScreen from './Screens/SearchScreen';
 import FilmScreen from './Screens/FilmScreen';
 import ProfileScreen from './Screens/ProfileScreen';
@@ -13,19 +14,80 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-ionicons';
 
 const Router = () => {
-  const Stack = createNativeStackNavigator();
+  const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
+  const TopTab = createMaterialTopTabNavigator();
+  const ListTabs = () => {
+    return (
+      <TopTab.Navigator
+        tabBarOptions={{
+          activeTintColor: '#fff',
+          inactiveTintColor: '#fff',
+          labelStyle: {
+            fontSize: 12,
+            fontWeight: 'bold',
+          },
+          style: {
+            backgroundColor: '#000',
+          },
+        }}>
+        <TopTab.Screen
+          name="Favorite"
+          component={FavoriteScreen}
+          options={{
+            tabBarLabel: 'Favorite',
+            tabBarIcon: ({color, size}) => (
+              <Ionicons name="ios-heart" size={size} color={color} />
+            ),
+          }}
+        />
+        <TopTab.Screen
+          name="Watchlist"
+          component={WatchlistScreen}
+          options={{
+            tabBarLabel: 'Watchlist',
+            tabBarIcon: ({color, size}) => (
+              <Ionicons name="ios-bookmark" size={size} color={color} />
+            ),
+          }}
+        />
+      </TopTab.Navigator>
+    );
+  };
 
-  const HomeStack = second => {
-    <Stack.Navigator>
-      <Stack.Screen name={FilmScreen} component={FilmScreen} />
-    </Stack.Navigator>;
+  const HomeStack = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name={'HomeScreen'}
+          component={HomeScreen}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    );
+  };
+  const SearchStack = () => {
+    return (
+      <Stack.Navigator
+        mode="modal"
+        screenOptions={{
+          headerShown: false,
+          gestureEnabled: true,
+          animationEnabled: true,
+          gestureResponseDistance: Dimensions.get('window').height,
+          gestureDirection: 'vertical',
+        }}>
+        <Stack.Screen name="SearchStack" component={SearchScreen} />
+
+        <Stack.Screen name="FilmScreen" component={FilmScreen} />
+      </Stack.Navigator>
+    );
   };
   return (
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({route}) => ({
-          headerShown:false,
+          headerShown: false,
           tabBarIcon: ({color, size}) => {
             let iconName;
             if (route.name === 'Home') iconName = 'home';
@@ -37,10 +99,9 @@ const Router = () => {
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
         })}>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen name="Favorites" component={FavoritesScreen} />
-
+        <Tab.Screen name="Home" component={HomeStack} />
+        <Tab.Screen name="Search" component={SearchStack} />
+        <Tab.Screen name="Favorites" component={ListTabs} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>

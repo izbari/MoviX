@@ -1,54 +1,76 @@
-import { StyleSheet, Text, View ,ActivityIndicator,Dimensions} from 'react-native'
-import React,{useEffect,useState} from 'react'
-import axios from 'react-native-axios';
-import FilmsRow from '../Components/FilmsRow'
-import Searchbar from '../Components/Searchbar'
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-const {width} = Dimensions.get('window')
-const SearchScreen = () => {
-  const [search, setSearch] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [films, setFilms] = useState([{}]);
-  useEffect( () => {
-    fetchFilms();
-  }, [])
+import {
+  Dimensions,
+  Keyboard,
+  View,
+  TextInput,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import FilmSearchRow from '../Components/FilmSearchRow';
+import Icon from 'react-native-ionicons';
+
+const SearchScreen = ({navigation}) => {
+  const [search, setSearch] = useState('');
+  const [check, setCheck] = useState(true);
+  const [background, setBackground] = useState();
  
-  const fetchFilms = async() => { 
-    const url = "https://api.themoviedb.org/3/movie/top_rated?api_key=3f03a07ac6044c1e5803a64814e95d31&language=en-US&page=1"
-    const data = 
-    await axios.get(url);
-    setLoading(false)
-    console.log(data.data.results)
-    setFilms(data.data.results);
-    
-  }
+  const onFocus = () => {
+    setBackground('white');
+  };
+
+  const onBlur = () => {
+    setCheck(true);
+    setBackground('#ededed');
+  };
   return (
-    <SafeAreaProvider>
-   <Searchbar
-        onIconPress={() => getData(search)}
-        icon={'arrow-left'}
+    <SafeAreaProvider style={{backgroundColor: '#fff'}}>
+      <StatusBar backgroundColor="#fff" barStyle="light-content" />
+      <View
         style={{
-          marginTop: 15,
-          alignSelf: 'center',
-          height: 45,
-          margin: 5,
-          marginBottom: 0,
-          backgroundColor: 'white',
-          width: width * 0.9,
-          borderRadius: 10,
-        }}
-        inputStyle={{fontSize: 15}}
-        placeholder="Type Something ..."
-        onChangeText={setSearch}
-        value={search}
-      />      
-      {!loading ? <FilmsRow title={'Top Rated'} data={films}/>: 
-      <ActivityIndicator size="large" color="#0000ff" />}
-      <FilmsRow title={'Top Rated'} data={films}/>
-      <FilmsRow title={'Top Rated'} data={films}/>
-      <FilmsRow title={'Top Rated'} data={films}/>
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 10,
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+           navigation.goBack();
+          }}>
+          <Icon name="arrow-back" size={24} color="grey" />
+        </TouchableOpacity>
+       <TextInput
+          onBlur={() => onBlur()}
+          onFocus={() => onFocus()}
+          autoFocus={check}
+          style={{
+            flex:1,
+            alignSelf: 'center',
+            height: 45,
+            margin: 5,
+            padding: 10,
+            backgroundColor: background,
+            borderRadius: 5,
+            padding: 10,
+          }}
+          inputStyle={{fontSize: 15}}
+          placeholder="Search"
+          onChangeText={setSearch}
+          value={search}/>
+        <TouchableOpacity
+        style={{position:'absolute',top:20,right:20}}
+        onPress={() => {
+          setSearch('');
+            Keyboard.dismiss();
+          }}>
+          <Icon name="close" size={20} color="grey" />
+        </TouchableOpacity>
+            <View>
+       </View>
+      </View>
+      <FilmSearchRow search={search} />
     </SafeAreaProvider>
-  )
-}
+  );
+};
 
 export default SearchScreen;
