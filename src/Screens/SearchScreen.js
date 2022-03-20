@@ -34,6 +34,7 @@ const SearchScreen = ({navigation}) => {
           marginHorizontal: 10,
         }}>
         <TouchableOpacity
+          style={{padding:5}}
           onPress={() => {
            navigation.goBack();
           }}>
@@ -58,12 +59,12 @@ const SearchScreen = ({navigation}) => {
           onChangeText={setSearch}
           value={search}/>
         <TouchableOpacity
-        style={{position:'absolute',top:20,right:20}}
+        style={{position:'absolute',top:16,right:20}}
         onPress={() => {
           setSearch('');
             Keyboard.dismiss();
           }}>
-          <Icon name="close" size={20} color="grey" />
+          <Icon name="close" size={24} color="grey" />
         </TouchableOpacity>
             <View>
        </View>

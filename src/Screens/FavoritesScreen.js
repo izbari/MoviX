@@ -1,25 +1,38 @@
-import {StyleSheet, Text,ScrollView, View, Image,TouchableOpacity} from 'react-native';
+import {StyleSheet, Text,ScrollView, View,FlatList, Image,TouchableOpacity} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-ionicons';
-const film = {
-  genre_ids: [28, 12, 878],
-  original_language: 'en',
-  original_title: 'Spider-Man: No Way Home',
-  poster_path: '/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg',
-  video: false,
-  vote_average: 8.2,
-  vote_count: 9831,
-  overview:
-    'Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.',
-  release_date: '2021-12-15',
-  title: 'Spider-Man: No Way Home',
-  id: 634649,
-  adult: false,
-  backdrop_path: '/iQFcwSGbZXMkeyKrxbPnwnRo5fl.jpg',
-  popularity: 9675.798,
-  media_type: 'movie',
+import FavoriteFilmCard from '../Components/FavoriteFilmCard';
+const mapStateToProps = (state, props) => {
+  const {filmFavoriteList} = state;
+  console.log("FAvorite -->",filmFavoriteList);
+   return filmFavoriteList;
 };
+
+const mapDispatchToProps = (dispatch, props) => ({
+ 
+ getFilmInfo: () => {
+   dispatch({
+     type: GET_REQUESTED_FILM,
+     payload: {filmId:props.route.params.filmId},
+   });
+ },
+});
+
+
 const FavoriteScreen = () => {
+  return (
+    <View style={{flex: 1,padding:10}}>
+      <FlatList 
+      data={Favorites}
+      renderItem={({item})=>{
+        return <FavoriteFilmCard item={item}/>
+      }}
+      keyExtractor={item=>item.id}
+      />
+    </View>
+  );
+};
+const WatchlistScreen = () => {
   const FavCard = () => (
     <View
       style={{
@@ -50,9 +63,9 @@ const FavoriteScreen = () => {
           <Text style={styles.movieTime}>87 min |</Text>
           <Text style={styles.movieGenre}> Action</Text>
         </View>
-
+  
         <Text style={styles.movieRate}>⭐ 8.5</Text>
-
+  
         <View style={{flex: 1}}>
           <Text style={styles.movieOverview} numberOfLines={3}>
             {film.overview}
@@ -62,40 +75,33 @@ const FavoriteScreen = () => {
     </View>
   );
   return (
-    <View style={{flex: 1,padding:10}}>
-     <ScrollView
-     scrollEventThrottle={16}
-     showsVerticalScrollIndicator={false}
-     >
-     <FavCard />
-      <FavCard />
-      <FavCard />
-      <FavCard />
-      <FavCard />
-      <FavCard />
-      <FavCard />
-      <FavCard />
+      <View style={{flex: 1,padding:10}}>
+       <ScrollView
+       scrollEventThrottle={16}
+       showsVerticalScrollIndicator={false}
+       >
        <FavCard />
-      <FavCard />
-      <FavCard />
-      <FavCard /> 
-      <FavCard />
-      <FavCard />
-      <FavCard />
-      <FavCard /> 
-      <FavCard />
-      <FavCard />
-      <FavCard />
-      <FavCard />
-     </ScrollView>
-    </View>
-  );
-};
-const WatchlistScreen = () => {
-  return (
-    <View>
-      <Text>WatchlistScreen</Text>
-    </View>
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard /> 
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard /> 
+        <FavCard />
+        <FavCard />
+        <FavCard />
+        <FavCard />
+       </ScrollView>
+      </View>
   );
 };
 export {FavoriteScreen, WatchlistScreen};

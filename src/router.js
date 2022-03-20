@@ -1,17 +1,21 @@
-import {Dimensions} from 'react-native';
 import React from 'react';
+import {Dimensions} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+import Ionicons from 'react-native-ionicons';
+
 import {FavoriteScreen, WatchlistScreen} from './Screens/FavoritesScreen';
-import HomeScreen from './Screens/HomeScreen';
+import {HomeScreen,CategoryScreen} from './Screens/HomeScreen';
 import SearchScreen from './Screens/SearchScreen';
 import FilmScreen from './Screens/FilmScreen';
 import ProfileScreen from './Screens/ProfileScreen';
-import FavoritesScreen from './Screens/FavoritesScreen';
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-ionicons';
+import {store} from '../store';
+import {Provider} from 'react-redux';
+
 
 const Router = () => {
   const Stack = createStackNavigator();
@@ -20,24 +24,25 @@ const Router = () => {
   const ListTabs = () => {
     return (
       <TopTab.Navigator
-        tabBarOptions={{
+        screenOptions={{
           activeTintColor: '#fff',
           inactiveTintColor: '#fff',
           labelStyle: {
             fontSize: 12,
             fontWeight: 'bold',
           },
-          style: {
-            backgroundColor: '#000',
+          tabBarStyle:{
+            height:45
           },
+          tabBarIndicatorStyle:{backgroundColor:'black'}
+
         }}>
         <TopTab.Screen
           name="Favorite"
           component={FavoriteScreen}
           options={{
-            tabBarLabel: 'Favorite',
-            tabBarIcon: ({color, size}) => (
-              <Ionicons name="ios-heart" size={size} color={color} />
+            tabBarIcon: ({size,color}) => (
+              <Ionicons name="ios-heart" size={26} color={'#000'} />
             ),
           }}
         />
@@ -45,9 +50,8 @@ const Router = () => {
           name="Watchlist"
           component={WatchlistScreen}
           options={{
-            tabBarLabel: 'Watchlist',
-            tabBarIcon: ({color, size}) => (
-              <Ionicons name="ios-bookmark" size={size} color={color} />
+            tabBarIcon: () => (
+              <Ionicons name="ios-bookmark" size={28} color={'#000'} />
             ),
           }}
         />
@@ -57,44 +61,61 @@ const Router = () => {
 
   const HomeStack = () => {
     return (
-      <Stack.Navigator>
-        <Stack.Screen
+      <Stack.Navigator
+        screenOptions={{
+          presentation: 'modal',
+          animationEnabled:true,
+          
+          headerShown: false,
+          gestureEnabled: false,
+          gestureResponseDistance: Dimensions.get('window').height,
+          gestureDirection: 'vertical',
+        }}>
+         <Stack.Screen
           name={'HomeScreen'}
           component={HomeScreen}
           options={{headerShown: false}}
+        /> 
+          <Stack.Screen
+          name={'CategoryScreen'}
+          component={CategoryScreen}
+          options={{headerShown: false}}
         />
+        
+        <Stack.Screen name="FilmScreen" component={FilmScreen} options={{headerTransparent:true}}/>
       </Stack.Navigator>
     );
   };
   const SearchStack = () => {
     return (
       <Stack.Navigator
-        mode="modal"
         screenOptions={{
+          presentation: 'modal',
           headerShown: false,
           gestureEnabled: true,
-          animationEnabled: true,
           gestureResponseDistance: Dimensions.get('window').height,
           gestureDirection: 'vertical',
         }}>
-        <Stack.Screen name="SearchStack" component={SearchScreen} />
-
+         <Stack.Screen name="SearchStack" component={SearchScreen} /> 
         <Stack.Screen name="FilmScreen" component={FilmScreen} />
       </Stack.Navigator>
     );
   };
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({route}) => ({
+          headerTitleStyle: {color:'red'},
           headerShown: false,
+          tabBarShowLabel: false,
           tabBarIcon: ({color, size}) => {
             let iconName;
             if (route.name === 'Home') iconName = 'home';
             else if (route.name === 'Profile') iconName = 'person';
             else if (route.name === 'Favorites') iconName = 'heart';
             else iconName = 'search';
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Ionicons name={iconName} size={28} color={color} />;
           },
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
@@ -105,6 +126,7 @@ const Router = () => {
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 };
 
