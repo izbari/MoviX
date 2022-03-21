@@ -4,6 +4,7 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
+  Pressable,
   FlatList,
   ActivityIndicator,
 } from 'react-native';
@@ -47,6 +48,7 @@ const FilmsRow = ({title,query,showCategory,refresh}) => {
         }}>
          {showCategory &&  <Icon onPress={()=>{navigation.goBack()}} name="arrow-back" color="#000" size={24} />}
         <Text style={styles.listHeader}>{title}</Text>
+       
         <TouchableOpacity onPress={() => {navigation.navigate('CategoryScreen',{title:title,query:query})}}>
           {!showCategory &&  <Text style={{color: '#2d6bff', fontWeight: 'bold'}}>SEE ALL</Text>}
         </TouchableOpacity>
@@ -54,7 +56,7 @@ const FilmsRow = ({title,query,showCategory,refresh}) => {
       {showCategory ?
       <FlatList
         data={films}
-        renderItem={({item}) => <FilmCard item={item} customMargin={15} />}
+        renderItem={({item}) => <FilmCard item={item} customMargin={10} customWidth={170}  />}
         keyExtractor={item => item.id + Math.random()}
         showsHorizontalScrollIndicator={false}
         numColumns={2}

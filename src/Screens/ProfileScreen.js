@@ -5,6 +5,7 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -70,11 +71,41 @@ const ProfileScreen = () => {
           <Text style={styles.favoritesNo}>8</Text>
         </View>
       </View>
+       
+        <View style={styles.container2}>
+      <Pressable
+        style={styles.button}
+        onPress={() => console.log('pressed')}
+        android_ripple={{color: 'green'}}>
+        <Text style={styles.buttonText}>Button</Text>
+      </Pressable>
+
+    </View>
     </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
+  container2: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    borderRadius: 8,
+    padding: 6,
+    height: 50,
+    width: '70%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    backgroundColor: 'cyan',
+  },
+  buttonText: {
+    fontSize: 16,
+    color: 'black',
+  },
   container: {
     flex: 1,
   },

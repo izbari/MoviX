@@ -1,4 +1,4 @@
-import {View, Text, FlatList, ActivityIndicator} from 'react-native';
+import {View, Text, FlatList, ActivityIndicator,Dimensions} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import axios from 'react-native-axios';
 import FilmSearchCard from '../FilmSearchCard';
@@ -26,11 +26,12 @@ const filmSearchRow = ({search}) => {
     );
   }
   return (
-    <View>
+    <View style={{flex:1,paddingTop:5}}>
       <FlatList
+      ItemSeparatorComponent={() => <View style={{height:1,backgroundColor:'#ededed'}}/>}
         ListHeaderComponent={() =>
           !search && (
-            <Text style={{marginLeft: 15, fontWeight: 'bold'}}>Trending</Text>
+            <Text style={{marginLeft: 15,marginVertical:5, fontWeight: 'bold',color:'#808080'}}>Trending</Text>
           )
         }
         data={films}
@@ -40,12 +41,12 @@ const filmSearchRow = ({search}) => {
         ListEmptyComponent={() => (
           <View
             style={{
-              backgroundColor: 'red',
+              marginTop: Dimensions.get('window').height / 5 ,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Icon name="alert" size={100} color="grey" />
-            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+            <Icon name="alert" size={150} color="#c6c6c6" />
+            <Text style={{fontWeight: 'bold', fontSize: 20,color:'#c6c6c6'}}>
               No Film Found
             </Text>
           </View>

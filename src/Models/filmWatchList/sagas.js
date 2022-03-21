@@ -1,13 +1,12 @@
 import {takeEvery, put, call} from 'redux-saga/effects';
 import {
-  GET_REQUESTED_FILM,
-  GET_REQUESTED_FILM_SUCCESS,
+  ADD_TO_WATCH_LIST, ADD_TO_WATCH_LIST_SUCCESS,
 } from './actions';
 import {queryApi} from '../query-api';
 import {MOVIE_ENDPOINT,API_KEY} from '@env';
 
 function* handler() {
-  yield takeEvery(GET_REQUESTED_FILM, getFilmInfo);
+  yield takeEvery(ADD_TO_WATCH_LIST, getFilmInfo);
 }
 
 function* getFilmInfo(action) {
@@ -21,7 +20,7 @@ function* getFilmInfo(action) {
 
     // API call
     yield put({
-      type: GET_REQUESTED_FILM_SUCCESS,
+      type: ADD_TO_WATCH_LIST_SUCCESS,
       payload: {
         data:{loading:false,film:data}
       
@@ -33,4 +32,4 @@ function* getFilmInfo(action) {
   }
 }
 
-export {handler};
+export default handler; 

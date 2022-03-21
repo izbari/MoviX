@@ -6,7 +6,7 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import FilmSearchRow from '../Components/FilmSearchRow';
 import Icon from 'react-native-ionicons';

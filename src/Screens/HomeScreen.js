@@ -61,7 +61,7 @@ const HomeScreen = ({navigation}) => {
 };
 const CategoryScreen = ({route}) => {
   const {title, query} = route.params;
-  return <FilmsRow title={title} query={query} showCategory={true} />;
+  return <FilmsRow title={title} query={query} showCategory={true} c />;
 };
 
 export {HomeScreen, CategoryScreen};

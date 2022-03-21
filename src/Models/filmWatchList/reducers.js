@@ -1,14 +1,14 @@
-import {GET_REQUESTED_FILM_SUCCESS} from './actions';
+import {ADD_TO_WATCH_LIST_SUCCESS} from './actions';
 
 const initialState = {
-  favoriteFilms: [],
+  watchList: [],
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_REQUESTED_FILM_SUCCESS: {
+    case ADD_TO_WATCH_LIST_SUCCESS: {
       const {film}= action.payload.data;
-      return {...state,film};
+      return [...state.watchList,film];
     }
     default:
       return state;

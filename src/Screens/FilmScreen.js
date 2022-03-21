@@ -4,6 +4,7 @@ import {
   Easing,
   ActivityIndicator,
   Image,
+  TouchableOpacity,
   ImageBackground,
   ScrollView,
   StatusBar,
@@ -53,7 +54,7 @@ function FilmScreen({navigation,route}) {
   }
   return (
     <SafeAreaProvider>
-      <View style={{flex:1,bottomMargin:insets.top,}}>
+      <View style={{flexGrow:1,bottomMargin:insets.top,}}>
         <StatusBar barStyle="light-content" />
 
         {/* Back button */}
@@ -196,7 +197,8 @@ function FilmScreen({navigation,route}) {
               ]}></View>
 
             <View style={styles.container}>
-              <View
+             <View style={{flexDirection:'row',justifyContent:'space-between',width:'98%',alignItems:'center'}}>
+             <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -205,6 +207,13 @@ function FilmScreen({navigation,route}) {
                 <Icon name="calendar" size={20} color="grey" />
                 <Text style={{fontSize: 14}}>{'  ' + film.release_date}</Text>
               </View>
+              <TouchableOpacity
+              style={{flexDirection:'row',alignItems:'center',borderRadius:20,backgroundColor:'tomato',padding:5,paddingHorizontal:20}}
+              >
+                <Text style={{fontWeight:'bold',color:'#fff'}} >Add to watchlist   </Text>
+                <Icon name='add' size={24} color='#fff'/>
+              </TouchableOpacity>
+             </View>
               <View
                 style={{
                   height: 1,
@@ -256,10 +265,13 @@ function FilmScreen({navigation,route}) {
                   {reviewCount}
                 </Text>
               </View>
-              <FilmReviewContainer
+             <View style={{marginBottom:150}}>
+             <FilmReviewContainer
                 filmId={film.id}
                 setReviewCount={setReviewCount}
               />
+             </View>
+            
             </View>
           </View>
         </Animated.ScrollView>

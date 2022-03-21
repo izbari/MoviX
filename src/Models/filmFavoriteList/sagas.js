@@ -12,7 +12,7 @@ function* handler() {
 
 function* getFilmInfo(action) {
   const {filmId} = action.payload;
-  
+    console.warn("sagaya gelen id ",filmId);
   try {
     const {data} = yield call(queryApi, {
       endpoint: MOVIE_ENDPOINT+filmId+"?api_key="+API_KEY,
@@ -33,4 +33,4 @@ function* getFilmInfo(action) {
   }
 }
 
-export {handler};
+export default handler
