@@ -1,20 +1,18 @@
-import {
-  Text,
-  View,
-  ImageBackground,
-  TouchableOpacity,
-  
-} from 'react-native';
+import {Text, View, ImageBackground, TouchableOpacity} from 'react-native';
 import React from 'react';
 import styles from './filmCard.style';
 import {useNavigation} from '@react-navigation/native';
-import {connect, useDispatch,useSelector} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import Icon from 'react-native-ionicons';
-const mapStateToProps = (state) => {
-return{favList:state.filmFavoriteList.favoriteFilms}
-}
-const FilmCard = ({item,customMargin,favList,customWidth}) => {
-  console.log("+",favList.length);
+import {getFavorites} from '../../Models/reselect';
+
+const mapStateToProps = state => {
+  return {
+    favList: getFavorites(state.filmFavoriteList.favoriteFilms),
+  };
+};
+
+const FilmCard = ({item, customMargin, favList, customWidth}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   return (
@@ -23,12 +21,12 @@ const FilmCard = ({item,customMargin,favList,customWidth}) => {
       onPress={() => {
         navigation.navigate('FilmScreen', {filmId: item.id});
       }}
-      style={[styles.cardContainer, customMargin && {margin: customMargin,}]}>
+      style={[styles.cardContainer, customMargin && {margin: customMargin}]}>
       <>
         <ImageBackground
-          style={[styles.image,customWidth && {width:customWidth}]}
+          style={[styles.image, customWidth && {width: customWidth}]}
           resizeMode="cover"
-          imageStyle={{ borderRadius: 10}}
+          imageStyle={{borderRadius: 10}}
           source={{
             uri: `http://image.tmdb.org/t/p/w500${item.poster_path}`,
           }}>
@@ -36,19 +34,34 @@ const FilmCard = ({item,customMargin,favList,customWidth}) => {
         </ImageBackground>
         <View style={{position: 'absolute', top: 5, right: 10}}>
           <TouchableOpacity
+            activeOpacity={0.8}
             onPress={() => {
               dispatch({
                 type: 'ADD_TO_FAVORITE_LIST',
-                payload: {filmId: item.id},
+                payload: {film: item},
               });
             }}>
-            <Icon name= { favList.some(fav=>fav.title === item.title) ? "heart" : "heart-empty"} size={26} color="white" />
+            <Icon
+              name={
+                favList.some(fav => fav.id === item.id)
+                  ? 'heart'
+                  : 'heart-empty'
+              }
+              size={26}
+              color="white"
+            />
           </TouchableOpacity>
-            </View>
-        
+        </View>
       </>
     </TouchableOpacity>
   );
 };
 
-export default connect(mapStateToProps)(FilmCard);
+export default connect(mapStateToProps)(
+  React.memo(FilmCard, (prevProps, nextProps) => {
+    return (
+      prevProps?.favList.includes(prevProps.item) ===
+      nextProps?.favList.includes(nextProps.item)
+    );
+  }),
+);

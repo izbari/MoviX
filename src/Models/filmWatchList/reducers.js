@@ -7,9 +7,16 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_WATCH_LIST_SUCCESS: {
-      const {film}= action.payload.data;
-      return [...state.watchList,film];
+      console.log("reducer buraya geldi")
+      const {film} = action.payload.data;
+      return {watchList:[...state.watchList,film]};
     }
+    case "REMOVE_TO_WATCHLIST": {
+      const {film} = action.payload;
+      console.log("filmm-> ",film)
+      return {watchList:state.watchList.filter(_film=>_film.id!==film.id)};
+    }
+
     default:
       return state;
   }

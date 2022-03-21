@@ -20,6 +20,7 @@ const Router = () => {
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
   const TopTab = createMaterialTopTabNavigator();
+ 
   const ListTabs = () => {
     return (
       <TopTab.Navigator
@@ -74,17 +75,7 @@ const Router = () => {
           component={HomeScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen
-          name={'CategoryScreen'}
-          component={CategoryScreen}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="FilmScreen"
-          component={FilmScreen}
-          options={{headerTransparent: true}}
-        />
+       
       </Stack.Navigator>
     );
   };
@@ -99,34 +90,49 @@ const Router = () => {
           gestureDirection: 'vertical',
         }}>
         <Stack.Screen name="SearchStack" component={SearchScreen} />
-        <Stack.Screen name="FilmScreen" component={FilmScreen} />
       </Stack.Navigator>
     );
   };
+  const Tabs = () => { 
+    return(
+      <Tab.Navigator
+      screenOptions={({route}) => ({
+        headerTitleStyle: {color: 'red'},
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarIcon: ({color, size}) => {
+          let iconName;
+          if (route.name === 'Home') iconName = 'home';
+          else if (route.name === 'Profile') iconName = 'person';
+          else if (route.name === 'Favorites') iconName = 'heart';
+          else iconName = 'search';
+          return <Ionicons name={iconName} size={28} color={color} />;
+        },
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+      })}>
+      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen name="Search" component={SearchStack} />
+      <Tab.Screen name="Favorites" component={ListTabs} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+    )
+   }
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({route}) => ({
-            headerTitleStyle: {color: 'red'},
-            headerShown: false,
-            tabBarShowLabel: false,
-            tabBarIcon: ({color, size}) => {
-              let iconName;
-              if (route.name === 'Home') iconName = 'home';
-              else if (route.name === 'Profile') iconName = 'person';
-              else if (route.name === 'Favorites') iconName = 'heart';
-              else iconName = 'search';
-              return <Ionicons name={iconName} size={28} color={color} />;
-            },
-            tabBarActiveTintColor: 'tomato',
-            tabBarInactiveTintColor: 'gray',
-          })}>
-          <Tab.Screen name="Home" component={HomeStack} />
-          <Tab.Screen name="Search" component={SearchStack} />
-          <Tab.Screen name="Favorites" component={ListTabs} />
-          <Tab.Screen name="Profile" component={ProfileScreen} />
-        </Tab.Navigator>
+        
+      <NavigationContainer  >
+        <Stack.Navigator
+        screenOptions={{headerShown:false}}
+        >
+          <Stack.Screen name="Tabs" component={Tabs} />
+          <Stack.Screen name="FilmScreen" component={FilmScreen} />
+          <Stack.Screen
+          name={'CategoryScreen'}
+          component={CategoryScreen}
+          options={{headerShown: false}}
+        />
+        </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );

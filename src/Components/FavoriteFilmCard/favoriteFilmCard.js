@@ -3,12 +3,15 @@ import { View,Text,Image,TouchableOpacity } from 'react-native';
 import styles from './favoriteFilmCard.style';
 import Icon from 'react-native-ionicons';
 import { useDispatch } from 'react-redux';
-const FavCard = ({item}) => {
-
+import { useNavigation } from '@react-navigation/native';
+import {SearchFilmGenres} from '../../Constants';
+const FavCard = ({item,type}) => {
+  console.log(item)
+  const navigation = useNavigation();
   const dispatch = useDispatch();
-
   return(
     <TouchableOpacity
+      onPress={() => {navigation.navigate('FilmScreen', {filmId: item.id})}}
       activeOpacity={0.8}
       style={{
         width: '100%',
@@ -27,10 +30,13 @@ const FavCard = ({item}) => {
         }}
       />
      <TouchableOpacity
-     onPress={()=>{dispatch({type: 'REMOVE_TO_FAVORITE_LIST', payload: {title:item.title}})}}
+     onPress={()=>{
+      type== "watchlist" ? dispatch({type: 'REMOVE_TO_WATCHLIST', payload: {film:item}})
+      :
+      dispatch({type: 'REMOVE_TO_FAVORITE_LIST', payload: {film:item}})}}
      style={{position:'absolute',top:20,right:20,width:25,height:25,zIndex:2}}
      >
-     <Icon name='heart' size={24} color='red'  />
+     <Icon name={type == "watchlist" ? 'bookmark' : 'heart'} size={28} color='tomato'  />
      </TouchableOpacity>
       <View style={{flex: 1, padding: 10, marginLeft: 5}}>
         <Text
@@ -38,11 +44,16 @@ const FavCard = ({item}) => {
         style={styles.movieName}>{item.title}</Text>
         <View style={{flexDirection: 'row'}}>
         <Text style={styles.movieGenre}>
-                {Math.floor(item.runtime / 60) +
+        {type == "watchlist" ?  Math.floor(item.runtime / 60) +
                     'h ' +
                     (item.runtime % 60) +
                     'm · ' +
-                    item?.genres.map(genre => genre.name).join(', ')}
+                    item.genres
+                    .map(genre => genre.name)
+                    .join(', ')
+                    :  item.genre_ids
+                      .map(genreId => SearchFilmGenres[genreId])
+                      .join(', ')}
               </Text>
         </View>
 

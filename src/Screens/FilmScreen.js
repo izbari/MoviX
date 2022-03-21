@@ -1,27 +1,25 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {
   Animated,
-  Easing,
   ActivityIndicator,
-  Image,
   TouchableOpacity,
   ImageBackground,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import FilmReviewContainer from '../Components/FilmReviewContainer';
-import axios from 'react-native-axios';
+import axios from 'axios';
 import Icon from 'react-native-ionicons';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-
+import { useDispatch } from 'react-redux';
+import {ADD_TO_WATCH_LIST} from '../Models/filmWatchList/actions';
 function FilmScreen({navigation,route}) {
-  
+  const dispatch = useDispatch();
   const HEADER_HEIGHT_EXPANDED = 140;
   const HEADER_HEIGHT_NARROWED = 60;
 
@@ -203,11 +201,15 @@ function FilmScreen({navigation,route}) {
                   flexDirection: 'row',
                   alignItems: 'center',
                   margin: 15,
+                  padding:5
                 }}>
                 <Icon name="calendar" size={20} color="grey" />
                 <Text style={{fontSize: 14}}>{'  ' + film.release_date}</Text>
               </View>
               <TouchableOpacity
+              onPress={()=>{dispatch(
+              {type:ADD_TO_WATCH_LIST,payload:{film:film}}
+              )}}
               style={{flexDirection:'row',alignItems:'center',borderRadius:20,backgroundColor:'tomato',padding:5,paddingHorizontal:20}}
               >
                 <Text style={{fontWeight:'bold',color:'#fff'}} >Add to watchlist   </Text>
@@ -224,7 +226,7 @@ function FilmScreen({navigation,route}) {
                 }}></View>
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 24,
                   fontWeight: 'bold',
                   paddingHorizontal: 10,
                   color: 'black',
@@ -243,8 +245,7 @@ function FilmScreen({navigation,route}) {
                   alignSelf: 'center',
                 }}></View>
 
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+             
                 <Text
                   style={{
                     fontWeight: 'bold',
@@ -252,19 +253,9 @@ function FilmScreen({navigation,route}) {
                     padding: 10,
                     color: 'black',
                   }}>
-                  Reviews
+                  Reviews · {reviewCount}
                 </Text>
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    fontSize: 24,
-                    padding: 10,
-                    color: 'black',
-                    marginRight: 10,
-                  }}>
-                  {reviewCount}
-                </Text>
-              </View>
+                
              <View style={{marginBottom:150}}>
              <FilmReviewContainer
                 filmId={film.id}

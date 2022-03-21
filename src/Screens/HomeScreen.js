@@ -1,7 +1,7 @@
 import {
   Dimensions,
   StatusBar,
-  Pressable,
+  TouchableOpacity,
   Text,
   RefreshControl,
   ScrollView,
@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import FilmsRow from '../Components/FilmsRow';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Icon from 'react-native-ionicons';
 const {width} = Dimensions.get('window');
 
 const HomeScreen = ({navigation}) => {
@@ -29,12 +30,13 @@ const HomeScreen = ({navigation}) => {
             onRefresh={() => refreshing()}
           />
         }>
-        <Pressable
+        <TouchableOpacity
+          activeOpacity={0.8}
           onPress={() => {
             navigation.navigate('Search');
           }}
           style={{
-            justifyContent: 'center',
+            flexDirection:'row',
             alignSelf: 'center',
             height: 45,
             margin: 5,
@@ -43,9 +45,12 @@ const HomeScreen = ({navigation}) => {
             width: width * 0.95,
             borderRadius: 5,
             padding: 10,
+            paddingLeft: 15,
+            alignItems:'center'
           }}>
-          <Text>Search Movie</Text>
-        </Pressable>
+            <Icon name='search' size={24} color='grey' />
+          <Text>  Search Movie</Text>
+        </TouchableOpacity>
 
         <FilmsRow title={'Top Rated'} query={'top_rated'} refresh={refresh} />
         <FilmsRow title={'Popular'} query={'popular'} refresh={refresh} />

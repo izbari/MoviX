@@ -1,6 +1,6 @@
 import {View, Text, FlatList, ActivityIndicator,Dimensions} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import axios from 'react-native-axios';
+import { useSearch } from '../../Utils/searchUtil';
 import FilmSearchCard from '../FilmSearchCard';
 import Icon from 'react-native-ionicons';
 const filmSearchRow = ({search}) => {
@@ -12,8 +12,8 @@ const filmSearchRow = ({search}) => {
         ? `https://api.themoviedb.org/3/search/movie?api_key=3f03a07ac6044c1e5803a64814e95d31&query=${search}&language=en-US&page=1&include_adult=false`
         : `https://api.themoviedb.org/3/trending/movie/week?api_key=3f03a07ac6044c1e5803a64814e95d31`;
     const filmReview = async () => {
-      const {data} = await axios.get(url);
-      setFilms(data.results);
+      const data = await useSearch(url);
+      setFilms(data);
       setLoading(false);
     };
     filmReview();

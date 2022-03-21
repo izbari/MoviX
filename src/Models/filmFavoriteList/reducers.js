@@ -25,9 +25,9 @@ const reducer = (state = initialState, action) => {
       return {favoriteFilms:[...state.favoriteFilms,film]};
     }
     case 'REMOVE_TO_FAVORITE_LIST': {
-      const {title}= action.payload;
-      Toast(title + " removed from favorite list");
-      return {favoriteFilms:state.favoriteFilms.filter(film=>film.title!==title)};
+      const {film}= action.payload;
+      Toast(film.title + " removed from favorite list");
+      return {favoriteFilms:state.favoriteFilms.filter(_film=>_film.id!==film.id)};
 
     } 
     default:

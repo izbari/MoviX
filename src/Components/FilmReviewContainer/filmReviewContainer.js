@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import axios from 'react-native-axios';
+import axios from 'axios';
 import FilmReviewCard from '../FilmReviewCard';
 const filmReviewContainer = ({filmId, setReviewCount}) => {
   const [review, setReview] = useState([]);

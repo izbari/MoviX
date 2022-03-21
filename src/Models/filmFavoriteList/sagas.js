@@ -3,28 +3,20 @@ import {
   ADD_TO_FAVORITE_LIST,
   ADD_TO_FAVORITE_LIST_SUCCESS,
 } from './actions';
-import {queryApi} from '../query-api';
 import {MOVIE_ENDPOINT,API_KEY} from '@env';
-
+import axios from 'axios';
 function* handler() {
   yield takeEvery(ADD_TO_FAVORITE_LIST, getFilmInfo);
 }
 
 function* getFilmInfo(action) {
-  const {filmId} = action.payload;
-    console.warn("sagaya gelen id ",filmId);
+  const {film} = action.payload;
   try {
-    const {data} = yield call(queryApi, {
-      endpoint: MOVIE_ENDPOINT+filmId+"?api_key="+API_KEY,
-      method: 'GET',
-    });
-
-    // API call
+    //api call'a gerek kalmadığı için direkt film objesini redux  state'e atıyoruz
     yield put({
       type: ADD_TO_FAVORITE_LIST_SUCCESS,
       payload: {
-        data:{loading:false,film:data}
-      
+        data:{loading:false,film:film}
       },
     });
   } catch (err) {

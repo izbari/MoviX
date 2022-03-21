@@ -5,8 +5,6 @@ import styles from './filmSearchCard.style';
 import {SearchFilmGenres} from '../../Constants';
 const filmSearchCard = ({item}) => {
   const navigation = useNavigation();
-  console.log(SearchFilmGenres);
-
   return (
     <TouchableOpacity
     activeOpacity={0.8}

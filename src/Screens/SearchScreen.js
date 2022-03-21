@@ -26,7 +26,7 @@ const SearchScreen = ({navigation}) => {
   };
   return (
     <SafeAreaProvider style={{backgroundColor: '#fff'}}>
-      <StatusBar backgroundColor="#fff" barStyle="light-content" />
+      <StatusBar backgroundColor="#fff" barStyle="default" />
       <View
         style={{
           flexDirection: 'row',

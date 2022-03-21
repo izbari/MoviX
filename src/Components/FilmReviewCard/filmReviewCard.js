@@ -22,7 +22,10 @@ const filmReview = ({item}) => {
   }
 
   return (
-    < >
+    <View style={{backgroundColor:'#fafafa',
+    
+    margin:4,
+  }}>
       <View
         style={{
           flexDirection: 'row',
@@ -46,18 +49,19 @@ const filmReview = ({item}) => {
             {'@' + item.author_details.username}
           </Text>
         </View>
-        <View
+       {item.author_details.rating && <View
           style={{
             position: 'absolute',
-            top: 5,
+            top: 10,
             right: 20,
             flexDirection: 'row',
           }}>
-          <Text style={{color: 'black', fontSize: 15,alignSelf:'center'}}>
-            {item.author_details.rating}
+          
+         <Text style={{color: 'black', fontSize: 15,alignSelf:'center'}}>
+            {item.author_details.rating + " "} 
           </Text>
-          <Icon name="star" color={'#ffb900'} size={24} />
-        </View>
+           <Icon name="star" color={'#ffb900'} size={24} />
+        </View>}
       </View>
       <View
         style={{
@@ -87,7 +91,7 @@ const filmReview = ({item}) => {
           ) : null}
         </View>
       </View>
-    </>
+    </View>
   );
 };
 
