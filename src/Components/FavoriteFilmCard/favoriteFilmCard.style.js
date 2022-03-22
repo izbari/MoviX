@@ -1,5 +1,15 @@
 import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    flexDirection: 'row',
+    padding: 10,
+    elevation: 5,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  rightContainer: {flex: 1, padding: 10, marginLeft: 5},
   tinyLogo: {
     width: '35%',
     height: null,

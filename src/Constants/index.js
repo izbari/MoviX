@@ -1,6 +1,6 @@
 exports.Colors ={
-    PRIMARY:'#ffcb3f',
-    SECONDARY:'#34d049',
+    PRIMARY:'tomato',
+    SECONDARY:'black',
 }
 exports.SearchFilmGenres =
 {

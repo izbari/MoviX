@@ -20,7 +20,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-
+.env
 # Gradle
 /build/
 /packages/react-native-gradle-plugin/build/

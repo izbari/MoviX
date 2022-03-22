@@ -1,8 +1,5 @@
-import {takeEvery, put, call} from 'redux-saga/effects';
-import {
-  ADD_TO_WATCH_LIST, ADD_TO_WATCH_LIST_SUCCESS,
-} from './actions';
-import {MOVIE_ENDPOINT,API_KEY} from '@env';
+import {takeEvery, put} from 'redux-saga/effects';
+import {ADD_TO_WATCH_LIST, ADD_TO_WATCH_LIST_SUCCESS} from './actions';
 
 function* handler() {
   yield takeEvery(ADD_TO_WATCH_LIST, getFilmInfo);
@@ -10,14 +7,13 @@ function* handler() {
 
 function* getFilmInfo(action) {
   const {film} = action.payload;
-  
+
   try {
-    
     // API call
     yield put({
       type: ADD_TO_WATCH_LIST_SUCCESS,
       payload: {
-        data:{loading:false,film:film}
+        data: {loading: false, film: film},
       },
     });
   } catch (err) {
@@ -26,4 +22,4 @@ function* getFilmInfo(action) {
   }
 }
 
-export default handler; 
+export default handler;

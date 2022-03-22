@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, View} from 'react-native';
+import {Dimensions} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -100,13 +100,8 @@ const Router = () => {
     return (
       <Stack.Navigator
         screenOptions={{
-          presentation: 'modal',
-          animationEnabled: true,
-
+          presentation: 'card',
           headerShown: false,
-          gestureEnabled: false,
-          gestureResponseDistance: Dimensions.get('window').height,
-          gestureDirection: 'vertical',
         }}>
         <Stack.Screen
           name={'HomeScreen'}
@@ -120,11 +115,8 @@ const Router = () => {
     return (
       <Stack.Navigator
         screenOptions={{
-          presentation: 'modal',
+          presentation: 'card',
           headerShown: false,
-          gestureEnabled: true,
-          gestureResponseDistance: Dimensions.get('window').height,
-          gestureDirection: 'vertical',
         }}>
         <Stack.Screen name="SearchStack" component={SearchScreen} />
       </Stack.Navigator>

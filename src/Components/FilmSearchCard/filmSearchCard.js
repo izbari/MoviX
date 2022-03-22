@@ -8,7 +8,7 @@ const filmSearchCard = ({item}) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-    activeOpacity={0.8}
+      activeOpacity={0.8}
       onPress={() => {
         navigation.navigate('FilmScreen', {filmId: item.id});
       }}>
@@ -21,12 +21,14 @@ const filmSearchCard = ({item}) => {
           }}
         />
         <View style={{padding: 5}}>
-          <Text style={{color:'black',fontWeight:'500'}}>{item.original_title}</Text>
-          <View style={{flexDirection: 'row',alignItems:'center'}}>
-          <Icon name="star" color={'#ffb900'} size={20} />
+          <Text style={{color: 'black', fontWeight: '500'}}>
+            {item.original_title}
+          </Text>
+          <View style={styles.subtitleContainer}>
+            <Icon name="star" color={'#ffb900'} size={20} />
 
-            <Text style={{fontSize: 12,color:'grey'}}>{"  "+item.vote_average} · </Text>
-            <Text style={{fontSize: 12,color:'grey'}}>
+            <Text style={styles.subtitles}>{'  ' + item.vote_average} · </Text>
+            <Text style={{fontSize: 12, color: 'grey'}}>
               {item.genre_ids
                 .map(genreId => SearchFilmGenres[genreId])
                 .join(', ')}

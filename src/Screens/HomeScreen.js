@@ -67,7 +67,9 @@ const HomeScreen = ({navigation}) => {
         <View style={{margin: 25}}>
           <Pressable
             style={styles.button}
-            onPress={() => navigation.navigate('GenreTabs',{genres:SearchFilmGenres})}
+            onPress={() =>
+              navigation.navigate('GenreTabs', {genres: SearchFilmGenres})
+            }
             android_ripple={{color: '#fff', borderless: true}}>
             <Text style={styles.buttonText}>SEE MOVIE GENRES</Text>
           </Pressable>
@@ -81,8 +83,6 @@ const CategoryScreen = ({route}) => {
 
   return <FilmsRow title={title} query={query} showCategory={true} />;
 };
-
-
 
 const styles = StyleSheet.create({
   button: {

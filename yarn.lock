@@ -5745,7 +5745,7 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
-"prop-types@^15.5.10", "prop-types@^15.7.2", "prop-types@^15.8.1":
+"prop-types@^15.7.2", "prop-types@^15.8.1":
   "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   "version" "15.8.1"
@@ -5824,13 +5824,6 @@
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   "version" "16.13.1"
-
-"react-native-blur@^3.2.2":
-  "integrity" "sha512-r7zNQISL7kQX5ocQEet5QVOBzoXP+Nr3dO7Wql+fV6rebx/8I7eAUHnfITDx12WoOmRpiJjbt/4xF5gTEll6Uw=="
-  "resolved" "https://registry.npmjs.org/react-native-blur/-/react-native-blur-3.2.2.tgz"
-  "version" "3.2.2"
-  dependencies:
-    "prop-types" "^15.5.10"
 
 "react-native-codegen@^0.0.8":
   "integrity" "sha512-k/944+0XD+8l7zDaiKfYabyEKmAmyZgS1mj+4LcSRPyHnrjgCHKrh/Y6jM6kucQ6xU1+1uyMmF/dSkikxK8i+Q=="

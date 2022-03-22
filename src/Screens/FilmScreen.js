@@ -20,7 +20,6 @@ import {useDispatch} from 'react-redux';
 import {connect} from 'react-redux';
 import {ADD_TO_WATCH_LIST} from '../Models/filmWatchList/actions';
 import {getWatchlists} from '../Models/reselect';
-import PagerView from 'react-native-pager-view';
 import axios from 'axios';
 import FilmsRow from '../Components/FilmsRow';
 import {API_KEY, MOVIE_ENDPOINT} from '@env';
@@ -31,35 +30,12 @@ const mapStateToProps = state => {
   };
 };
 
-const MyPager = () => {
-  return (
-    <PagerView style={{flex: 1}} initialPage={0}>
-      {posters.map((item, index) => (
-        <View key={index}>
-          <Image source={{uri: item}} style={{width: '100%', height: 30}} />
-        </View>
-      ))}
-    </PagerView>
-  );
-};
 
 function FilmScreen({watchList, navigation, route}) {
-  useEffect(() => {
-    const url = `${MOVIE_ENDPOINT}${route.params.filmId}/images?api_key=${API_KEY}&language=en-US`;
-    console.log(url);
-    axios
-      .get(url)
-      .then(res => {
-        console.log(res.data.posters);
-        //setPoster(res.data.posters)
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
-  const dispatch = useDispatch();
   const HEADER_HEIGHT_EXPANDED = 140;
   const HEADER_HEIGHT_NARROWED = 60;
+
+  const dispatch = useDispatch();
 
   const AnimatedImageBackground =
     Animated.createAnimatedComponent(ImageBackground);
@@ -69,15 +45,21 @@ function FilmScreen({watchList, navigation, route}) {
   const [reviewCount, setReviewCount] = useState(null);
   const [loading, setLoading] = useState(true);
   const [trailerURl, setTrailerURl] = useState('')
+  const [filmId, setFilmId] = useState(route.params.filmId);
+
   useEffect(() => {
-    const url = `https://api.themoviedb.org/3/movie/${route.params.filmId}?api_key=3f03a07ac6044c1e5803a64814e95d31&language=en-US`;
+    setFilmId(route.params.filmId);
+  },[route.params.filmId]);
+ 
+  useEffect(() => {
+    const url = `${MOVIE_ENDPOINT}${filmId}?api_key=${API_KEY}&language=en-US`;
     const filmInfo = async () => {
       const {data} = await axios.get(url);
       setFilm(data);
       setLoading(false);
     };
     const videosUrl = 
-    `https://api.themoviedb.org/3/movie/${route.params.filmId}/videos?api_key=3f03a07ac6044c1e5803a64814e95d31&language=en-US&page=1`;
+    `${MOVIE_ENDPOINT}${filmId}/videos?api_key=${API_KEY}&language=en-US&page=1`;
     const trailerInfo = async () => {
       const {data} = await axios.get(videosUrl);
       setTrailerURl(data.results[0].key)
@@ -86,6 +68,8 @@ function FilmScreen({watchList, navigation, route}) {
     filmInfo();
     trailerInfo();
   }, []);
+
+
   if (loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -108,7 +92,7 @@ function FilmScreen({watchList, navigation, route}) {
       <View style={{flexGrow: 1, bottomMargin: insets.top}}>
         <StatusBar barStyle="light-content" />
 
-        {/* Back button */}
+     
 
         <Icon
           onPress={() => {
@@ -117,22 +101,10 @@ function FilmScreen({watchList, navigation, route}) {
           name="arrow-dropdown-circle"
           color="#fff"
           size={30}
-          style={{
-            zIndex: 10,
-            position: 'absolute',
-            top: 15,
-            left: 25,
-            height: 45,
-            width: 45,
-            borderRadius: 15,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          style={styles.backButton}
         />
 
-        {/* Refresh arrow */}
-
-        {/* Name + tweets count */}
+ 
         <Animated.View
           style={{
             flex: 1,
@@ -211,20 +183,9 @@ function FilmScreen({watchList, navigation, route}) {
             ],
           }}>
           <View
-            style={{
-              flex: 1,
-              opacity: 10,
-              backgroundColor: 'rgba(0,0,0, 0.25)',
-
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}></View>
+            style={styles.ghostImage}></View>
         </AnimatedImageBackground>
 
-        {/* Tweets/profile */}
         <Animated.ScrollView
           showsVerticalScrollIndicator={false}
           onScroll={Animated.event(
@@ -277,14 +238,7 @@ function FilmScreen({watchList, navigation, route}) {
                   onPress={() => {
                     dispatch({type: ADD_TO_WATCH_LIST, payload: {film: film}});
                   }}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    borderRadius: 20,
-                    backgroundColor: 'tomato',
-                    padding: 5,
-                    paddingHorizontal: 20,
-                  }}>
+                  style={styles.addButton}>
                   {!watchList.some(_film => _film.id == film.id) && (
                     <Text style={{fontWeight: 'bold', color: '#fff'}}>
                       Add to watchlist{' '}
@@ -331,20 +285,7 @@ function FilmScreen({watchList, navigation, route}) {
                       `https://www.youtube.com/watch?v=${trailerURl}`,
                     )
                   }
-                  style={{
-                    width: '90%',
-                    alignSelf: 'center',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 20,
-                    borderWidth: 5,
-                    borderColor: 'tomato',
-                    padding: 5,
-                    height:50,
-                    marginVertical:10,
-                    paddingHorizontal: 20,
-                  }}>
+                  style={styles.ytButton}>
                   <Icon name="logo-youtube" size={24} color="tomato" />
                   <Text style={{fontWeight: 'bold', color: 'tomato',fontSize:16}}>
                     {'   '}
@@ -352,7 +293,7 @@ function FilmScreen({watchList, navigation, route}) {
                   </Text>
                 </TouchableOpacity>
                 <Seperator />
-                <FilmsRow title={'Recommendations'} filmId={route.params.filmId} />
+                <FilmsRow title={'Recommendations'} filmId={filmId} />
                 <Seperator />
 
                 <Text
@@ -384,22 +325,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  text: {
-    color: 'black',
-  },
-  username: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: -3,
-  },
-  tweetsCount: {
-    fontSize: 13,
-  },
-  tweet: {
+  addButton:{
     flexDirection: 'row',
-    paddingVertical: 10,
+    alignItems: 'center',
+    borderRadius: 20,
+    backgroundColor: 'tomato',
+    padding: 5,
     paddingHorizontal: 20,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: 'rgba(255, 255, 255, 0.25)',
   },
+  ghostImage:{
+    flex: 1,
+    opacity: 10,
+    backgroundColor: 'rgba(0,0,0, 0.25)',
+
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  ytButton:{
+    width: '90%',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderWidth: 5,
+    borderColor: 'tomato',
+    padding: 5,
+    height:50,
+    marginVertical:10,
+    paddingHorizontal: 20,
+  },
+ backButton:{
+  zIndex: 10,
+  position: 'absolute',
+  top: 15,
+  left: 25,
+  height: 45,
+  width: 45,
+  borderRadius: 15,
+  alignItems: 'center',
+  justifyContent: 'center',
+}
 });

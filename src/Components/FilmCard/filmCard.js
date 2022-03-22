@@ -19,7 +19,7 @@ const FilmCard = ({item, customMargin, favList, customWidth}) => {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={() => {
-        navigation.navigate('FilmScreen', {filmId: item.id});
+        navigation.push('FilmScreen', {filmId: item.id});
       }}
       style={[styles.cardContainer, customMargin && {margin: customMargin}]}>
       <>

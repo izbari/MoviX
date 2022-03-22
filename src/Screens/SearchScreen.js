@@ -1,5 +1,4 @@
 import {
-  Dimensions,
   Keyboard,
   View,
   TextInput,
@@ -13,7 +12,6 @@ import Icon from 'react-native-ionicons';
 
 const SearchScreen = ({navigation}) => {
   const [search, setSearch] = useState('');
-  const [check, setCheck] = useState(true);
   const [background, setBackground] = useState();
 
   const onFocus = () => {
@@ -42,7 +40,7 @@ const SearchScreen = ({navigation}) => {
        <TextInput
           onBlur={() => onBlur()}
           onFocus={() => onFocus()}
-          autoFocus={check}
+          autoFocus={true}
           style={{
             flex:1,
             alignSelf: 'center',

@@ -2,10 +2,11 @@ import {View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import FilmReviewCard from '../FilmReviewCard';
+import {API_KEY, MOVIE_ENDPOINT} from '@env';
 const filmReviewContainer = ({filmId, setReviewCount}) => {
   const [review, setReview] = useState([]);
   useEffect(() => {
-    const url = `https://api.themoviedb.org/3/movie/${filmId}/reviews?api_key=3f03a07ac6044c1e5803a64814e95d31&language=en-US`;
+    const url = `https://api.themoviedb.org/3/movie/${filmId}/reviews?api_key=${API_KEY}&language=en-US`;
     const filmReview = async () => {
       const {data} = await axios.get(url);
       setReview(data.results);

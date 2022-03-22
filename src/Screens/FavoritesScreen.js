@@ -1,28 +1,18 @@
-import {
-  StyleSheet,
-  Text,
-  Pressable,
-  View,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, Text, Pressable, View, FlatList} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-ionicons';
 import FavoriteFilmCard from '../Components/FavoriteFilmCard';
-import { connect } from 'react-redux';
-import { getFavorites,getWatchlists } from '../Models/reselect';
+import {connect} from 'react-redux';
+import {getFavorites, getWatchlists} from '../Models/reselect';
 
 const EmptyListComponent = ({navigation, text}) => {
   let content = '' + text;
   content = content.split('!');
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{fontSize: 20, fontWeight: 'bold', color: 'black'}}>
-        {content[0]}
-      </Text>
+    <View style={styles.buttonContainer}>
+      <Text style={styles.emptyHeader}>{content[0]}</Text>
       <Icon name="sad" size={150} color="tomato" />
-      <Text style={{fontSize: 16, fontWeight: 'bold', color: 'grey'}}>
-        {content[1]}
-      </Text>
+      <Text style={styles.subHeader}>{content[1]}</Text>
       <Pressable
         style={styles.button}
         onPress={() => navigation.navigate('Home')}
@@ -32,13 +22,13 @@ const EmptyListComponent = ({navigation, text}) => {
     </View>
   );
 };
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     favorites: getFavorites(state.filmFavoriteList.favoriteFilms),
-    watchlists : getWatchlists(state.filmWatchList.watchList)
+    watchlists: getWatchlists(state.filmWatchList.watchList),
   };
 };
-const FavoriteView = ({navigation,favorites}) => {
+const FavoriteView = ({navigation, favorites}) => {
   return (
     <View style={{flex: 1, padding: 10}}>
       <FlatList
@@ -56,13 +46,15 @@ const FavoriteView = ({navigation,favorites}) => {
     </View>
   );
 };
-const WatchlistView = ({navigation,watchlists}) => {
+const WatchlistView = ({navigation, watchlists}) => {
   return (
     <View style={{flex: 1, padding: 10}}>
       <FlatList
         data={watchlists}
         contentContainerStyle={{flexGrow: 1}}
-        renderItem={({item}) => <FavoriteFilmCard item={item} type="watchlist" />}
+        renderItem={({item}) => (
+          <FavoriteFilmCard item={item} type="watchlist" />
+        )}
         keyExtractor={item => item.id}
         ListEmptyComponent={() => (
           <EmptyListComponent
@@ -74,19 +66,21 @@ const WatchlistView = ({navigation,watchlists}) => {
     </View>
   );
 };
-const FavoriteScreen= connect(mapStateToProps)(FavoriteView);
-const WatchlistScreen= connect(mapStateToProps)(WatchlistView);
-export {FavoriteScreen,WatchlistScreen}
+const FavoriteScreen = connect(mapStateToProps)(FavoriteView);
+const WatchlistScreen = connect(mapStateToProps)(WatchlistView);
+export {FavoriteScreen, WatchlistScreen};
 
 const styles = StyleSheet.create({
+  buttonContainer: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   buttonText: {
     fontSize: 16,
     color: '#fff',
     fontWeight: 'bold',
   },
-  
+  subHeader: {fontSize: 16, fontWeight: 'bold', color: 'grey'},
+  emptyHeader: {fontSize: 20, fontWeight: 'bold', color: 'black'},
   button: {
-    borderRadius:50,
+    borderRadius: 50,
     height: 50,
     width: '70%',
     justifyContent: 'center',
@@ -94,35 +88,5 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginTop: 10,
     backgroundColor: 'tomato',
-  },
-  tinyLogo: {
-    width: 100,
-    height: 150,
-    borderRadius: 8,
-  },
-  movieName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  movieTime: {
-    color: '#989898',
-    fontSize: 13,
-    marginTop: 5,
-    fontWeight: 'bold',
-  },
-  movieGenre: {
-    color: '#989898',
-    fontSize: 12,
-    marginTop: 5,
-    fontWeight: 'bold',
-  },
-  movieRate: {
-    alignSelf: 'flex-start',
-    marginTop: 5,
-  },
-  movieOverview: {
-    fontSize: 12,
-    marginTop: 10,
-    color: '#4e4e4e',
   },
 });

@@ -1,6 +1,7 @@
 import {Text, View, Image} from 'react-native';
 import React, {useState, useCallback} from 'react';
 import Icon from 'react-native-ionicons';
+import styles from './filmReviewCard.style';
 const filmReview = ({item}) => {
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
@@ -22,25 +23,12 @@ const filmReview = ({item}) => {
   }
 
   return (
-    <View style={{backgroundColor:'#fafafa',
-    borderWidth:1,
-    borderColor:'#e6e6e6',
-    margin:4,
-    borderRadius:10,
-  }}>
+    <View style={styles.reviewContainer}>
       <View
-        style={{
-          flexDirection: 'row',
-          margin: 5,
-          marginBottom: 0,
-          padding: 5,
-         
-          paddingBottom: 0,
-        }}>
+        style={styles.innerContainer}>
         <Image
-          onProgress={e => console.log(e)}
           resizeMode="cover"
-          style={{width: 50, height: 50, borderRadius: 100}}
+          style={styles.image}
           source={{
             uri: `${path}`,
           }}
