@@ -23,7 +23,7 @@ const FavCard = ({item,type}) => {
         marginBottom: 10,
       }}>
       <Image
-        resizeMode="contain"
+        resizeMode="cover"
         style={styles.tinyLogo}
         source={{
           uri: 'https://image.tmdb.org/t/p/w500'+item.poster_path,
@@ -56,9 +56,11 @@ const FavCard = ({item,type}) => {
                       .join(', ')}
               </Text>
         </View>
+      <View style={{flexDirection:'row',alignItems:'center',}}>
+      <Icon name="star" color={'#ffb900'} size={20} />
+        <Text style={styles.movieRate}>{" "+item.vote_average}</Text>
 
-        <Text style={styles.movieRate}>⭐ {item.vote_average}</Text>
-
+      </View>
         <View style={{flex: 1}}>
           <Text style={styles.movieOverview} numberOfLines={3}>
             {item.overview}

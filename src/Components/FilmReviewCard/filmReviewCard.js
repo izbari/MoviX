@@ -23,8 +23,10 @@ const filmReview = ({item}) => {
 
   return (
     <View style={{backgroundColor:'#fafafa',
-    
+    borderWidth:1,
+    borderColor:'#e6e6e6',
     margin:4,
+    borderRadius:10,
   }}>
       <View
         style={{
@@ -32,7 +34,7 @@ const filmReview = ({item}) => {
           margin: 5,
           marginBottom: 0,
           padding: 5,
-          
+         
           paddingBottom: 0,
         }}>
         <Image
@@ -74,7 +76,7 @@ const filmReview = ({item}) => {
           <Text
             onTextLayout={onTextLayout}
             numberOfLines={textShown ? undefined : 4}
-            style={{lineHeight: 18}}>
+            style={{lineHeight: 18,color:'grey'}}>
             {item.content}
           </Text>
 

@@ -8,9 +8,9 @@ import {
 import React from 'react';
 import Icon from 'react-native-ionicons';
 import FavoriteFilmCard from '../Components/FavoriteFilmCard';
-import {useSelector} from 'react-redux';
 import { connect } from 'react-redux';
 import { getFavorites,getWatchlists } from '../Models/reselect';
+
 const EmptyListComponent = ({navigation, text}) => {
   let content = '' + text;
   content = content.split('!');
@@ -20,13 +20,13 @@ const EmptyListComponent = ({navigation, text}) => {
         {content[0]}
       </Text>
       <Icon name="sad" size={150} color="tomato" />
-      <Text style={{fontSize: 18, fontWeight: 'bold', color: 'grey'}}>
+      <Text style={{fontSize: 16, fontWeight: 'bold', color: 'grey'}}>
         {content[1]}
       </Text>
       <Pressable
         style={styles.button}
         onPress={() => navigation.navigate('Home')}
-        android_ripple={{color: '#fff'}}>
+        android_ripple={{color: '#fff', borderless: true}}>
         <Text style={styles.buttonText}>BROWSE MOVIES</Text>
       </Pressable>
     </View>
@@ -39,7 +39,6 @@ const mapStateToProps = (state) => {
   };
 };
 const FavoriteView = ({navigation,favorites}) => {
-  console.log("favorites---->",favorites)
   return (
     <View style={{flex: 1, padding: 10}}>
       <FlatList
@@ -58,7 +57,6 @@ const FavoriteView = ({navigation,favorites}) => {
   );
 };
 const WatchlistView = ({navigation,watchlists}) => {
-  console.log("watchlist---->",watchlists)
   return (
     <View style={{flex: 1, padding: 10}}>
       <FlatList
@@ -86,9 +84,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  
   button: {
-    borderRadius: 50,
-    padding: 6,
+    borderRadius:50,
     height: 50,
     width: '70%',
     justifyContent: 'center',

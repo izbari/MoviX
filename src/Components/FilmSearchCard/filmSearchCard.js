@@ -3,6 +3,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import styles from './filmSearchCard.style';
 import {SearchFilmGenres} from '../../Constants';
+import Icon from 'react-native-ionicons';
 const filmSearchCard = ({item}) => {
   const navigation = useNavigation();
   return (
@@ -21,9 +22,11 @@ const filmSearchCard = ({item}) => {
         />
         <View style={{padding: 5}}>
           <Text style={{color:'black',fontWeight:'500'}}>{item.original_title}</Text>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={{fontSize: 12}}>⭐ {item.vote_average} · </Text>
-            <Text style={{fontSize: 12}}>
+          <View style={{flexDirection: 'row',alignItems:'center'}}>
+          <Icon name="star" color={'#ffb900'} size={20} />
+
+            <Text style={{fontSize: 12,color:'grey'}}>{"  "+item.vote_average} · </Text>
+            <Text style={{fontSize: 12,color:'grey'}}>
               {item.genre_ids
                 .map(genreId => SearchFilmGenres[genreId])
                 .join(', ')}

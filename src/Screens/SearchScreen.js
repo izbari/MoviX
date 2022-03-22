@@ -15,13 +15,12 @@ const SearchScreen = ({navigation}) => {
   const [search, setSearch] = useState('');
   const [check, setCheck] = useState(true);
   const [background, setBackground] = useState();
- 
+
   const onFocus = () => {
     setBackground('white');
   };
 
   const onBlur = () => {
-    setCheck(true);
     setBackground('#ededed');
   };
   return (

@@ -7,33 +7,68 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  Linking,
   View,
 } from 'react-native';
 import FilmReviewContainer from '../Components/FilmReviewContainer';
-import axios from 'axios';
 import Icon from 'react-native-ionicons';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
+import {connect} from 'react-redux';
 import {ADD_TO_WATCH_LIST} from '../Models/filmWatchList/actions';
-function FilmScreen({navigation,route}) {
+import {getWatchlists} from '../Models/reselect';
+import PagerView from 'react-native-pager-view';
+import axios from 'axios';
+import FilmsRow from '../Components/FilmsRow';
+import {API_KEY, MOVIE_ENDPOINT} from '@env';
+
+const mapStateToProps = state => {
+  return {
+    watchList: getWatchlists(state.filmWatchList.watchList),
+  };
+};
+
+const MyPager = () => {
+  return (
+    <PagerView style={{flex: 1}} initialPage={0}>
+      {posters.map((item, index) => (
+        <View key={index}>
+          <Image source={{uri: item}} style={{width: '100%', height: 30}} />
+        </View>
+      ))}
+    </PagerView>
+  );
+};
+
+function FilmScreen({watchList, navigation, route}) {
+  useEffect(() => {
+    const url = `${MOVIE_ENDPOINT}${route.params.filmId}/images?api_key=${API_KEY}&language=en-US`;
+    console.log(url);
+    axios
+      .get(url)
+      .then(res => {
+        console.log(res.data.posters);
+        //setPoster(res.data.posters)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
   const dispatch = useDispatch();
   const HEADER_HEIGHT_EXPANDED = 140;
   const HEADER_HEIGHT_NARROWED = 60;
 
-
-  
-  
-  const AnimatedImageBackground = Animated.createAnimatedComponent(
-    ImageBackground
-  );
+  const AnimatedImageBackground =
+    Animated.createAnimatedComponent(ImageBackground);
   const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
   const [film, setFilm] = useState(null);
   const [reviewCount, setReviewCount] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [trailerURl, setTrailerURl] = useState('')
   useEffect(() => {
     const url = `https://api.themoviedb.org/3/movie/${route.params.filmId}?api_key=3f03a07ac6044c1e5803a64814e95d31&language=en-US`;
     const filmInfo = async () => {
@@ -41,7 +76,15 @@ function FilmScreen({navigation,route}) {
       setFilm(data);
       setLoading(false);
     };
+    const videosUrl = 
+    `https://api.themoviedb.org/3/movie/${route.params.filmId}/videos?api_key=3f03a07ac6044c1e5803a64814e95d31&language=en-US&page=1`;
+    const trailerInfo = async () => {
+      const {data} = await axios.get(videosUrl);
+      setTrailerURl(data.results[0].key)
+    }
+   
     filmInfo();
+    trailerInfo();
   }, []);
   if (loading) {
     return (
@@ -50,43 +93,57 @@ function FilmScreen({navigation,route}) {
       </View>
     );
   }
+  const Seperator = () => (
+    <View
+    style={{
+      height: 1,
+      width: '95%',
+      backgroundColor: '#ededed',
+      marginVertical: 10,
+      alignSelf: 'center',
+    }}></View>
+  )
   return (
     <SafeAreaProvider>
-      <View style={{flexGrow:1,bottomMargin:insets.top,}}>
+      <View style={{flexGrow: 1, bottomMargin: insets.top}}>
         <StatusBar barStyle="light-content" />
 
         {/* Back button */}
-      
-           
-          <Icon onPress={()=>{navigation.goBack()}}name="arrow-dropdown-circle" color="#fff" size={30}
+
+        <Icon
+          onPress={() => {
+            navigation.goBack();
+          }}
+          name="arrow-dropdown-circle"
+          color="#fff"
+          size={30}
           style={{
             zIndex: 10,
             position: 'absolute',
-            top:  15,
+            top: 15,
             left: 25,
             height: 45,
             width: 45,
             borderRadius: 15,
             alignItems: 'center',
             justifyContent: 'center',
-          }} />
+          }}
+        />
 
         {/* Refresh arrow */}
-      
 
         {/* Name + tweets count */}
         <Animated.View
           style={{
-            
-            flex:1,
+            flex: 1,
             zIndex: 2,
             position: 'absolute',
             left: 0,
             right: 0,
             alignItems: 'center',
             opacity: scrollY.interpolate({
-              inputRange: [0, 50,150],
-              outputRange: [1, -1 ,1],
+              inputRange: [0, 50, 150],
+              outputRange: [1, -1, 1],
             }),
             transform: [
               {
@@ -100,13 +157,11 @@ function FilmScreen({navigation,route}) {
           }}>
           <Animated.View
             style={{
-              
               flex: 1,
-              width:'90%',
-             
-              
+              width: '90%',
+
               flexDirection: 'row',
-              alignSelf:'flex-end',
+              alignSelf: 'flex-end',
               justifyContent: 'space-evenly',
             }}>
             <View>
@@ -141,7 +196,7 @@ function FilmScreen({navigation,route}) {
           }}
           style={{
             flex: 1,
-            aspectRatio: 1, 
+            aspectRatio: 1,
             position: 'absolute',
             left: 0,
             right: 0,
@@ -151,24 +206,27 @@ function FilmScreen({navigation,route}) {
                 scale: scrollY.interpolate({
                   inputRange: [0, 100],
                   outputRange: [1.1, 1.6],
-                 
                 }),
               },
             ],
           }}>
           <View
-            style={{flex:1,opacity:10,backgroundColor:'rgba(0,0,0, 0.25)' 
-        
-            ,position:'absolute',top:0,left:0,right:0,bottom:0}}>
-          
+            style={{
+              flex: 1,
+              opacity: 10,
+              backgroundColor: 'rgba(0,0,0, 0.25)',
 
-            </View>
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}></View>
         </AnimatedImageBackground>
 
         {/* Tweets/profile */}
         <Animated.ScrollView
           showsVerticalScrollIndicator={false}
-          
           onScroll={Animated.event(
             [
               {
@@ -180,7 +238,6 @@ function FilmScreen({navigation,route}) {
             {useNativeDriver: true},
           )}
           style={{
-            
             zIndex: 3,
             marginTop: HEADER_HEIGHT_NARROWED,
             paddingTop: HEADER_HEIGHT_EXPANDED,
@@ -195,57 +252,109 @@ function FilmScreen({navigation,route}) {
               ]}></View>
 
             <View style={styles.container}>
-             <View style={{flexDirection:'row',justifyContent:'space-between',width:'98%',alignItems:'center'}}>
-             <View
+              <View
                 style={{
                   flexDirection: 'row',
+                  alignSelf: 'center',
+                  justifyContent: 'space-between',
+                  width: '95%',
                   alignItems: 'center',
-                  margin: 15,
-                  padding:5
                 }}>
-                <Icon name="calendar" size={20} color="grey" />
-                <Text style={{fontSize: 14}}>{'  ' + film.release_date}</Text>
-              </View>
-              <TouchableOpacity
-              onPress={()=>{dispatch(
-              {type:ADD_TO_WATCH_LIST,payload:{film:film}}
-              )}}
-              style={{flexDirection:'row',alignItems:'center',borderRadius:20,backgroundColor:'tomato',padding:5,paddingHorizontal:20}}
-              >
-                <Text style={{fontWeight:'bold',color:'#fff'}} >Add to watchlist   </Text>
-                <Icon name='add' size={24} color='#fff'/>
-              </TouchableOpacity>
-             </View>
-              <View
-                style={{
-                  height: 1,
-                  width: '95%',
-                  backgroundColor: '#8fa5b9',
-                  marginBottom: 10,
-                  alignSelf: 'center',
-                }}></View>
-              <Text
-                style={{
-                  fontSize: 24,
-                  fontWeight: 'bold',
-                  paddingHorizontal: 10,
-                  color: 'black',
-                }}>
-                Overview
-              </Text>
-              <Text style={{fontSize: 14, padding: 10, color: 'black'}}>
-                {film.overview}
-              </Text>
-              <View
-                style={{
-                  height: 1,
-                  width: '95%',
-                  backgroundColor: '#8fa5b9',
-                  marginTop: 5,
-                  alignSelf: 'center',
-                }}></View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
 
-             
+                    margin: 15,
+                    padding: 5,
+                  }}>
+                  <Icon name="calendar" size={20} color="tomato" />
+                  <Text style={{fontSize: 14, color: 'grey'}}>
+                    {'  ' + film.release_date}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch({type: ADD_TO_WATCH_LIST, payload: {film: film}});
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    borderRadius: 20,
+                    backgroundColor: 'tomato',
+                    padding: 5,
+                    paddingHorizontal: 20,
+                  }}>
+                  {!watchList.some(_film => _film.id == film.id) && (
+                    <Text style={{fontWeight: 'bold', color: '#fff'}}>
+                      Add to watchlist{' '}
+                    </Text>
+                  )}
+                  <Icon
+                    name={
+                      watchList.some(_film => _film.id == film.id)
+                        ? 'checkmark'
+                        : 'add'
+                    }
+                    size={24}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
+              </View>
+              <Seperator />
+              <View style={{padding: 10}}>
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 'bold',
+                    paddingHorizontal: 10,
+                    color: 'black',
+                  }}>
+                  Overview
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    padding: 10,
+                    color: 'grey',
+                    lineHeight: 21,
+                  }}>
+                  {film.overview}
+                </Text>
+              </View>
+              <View style={{padding: 10}}>
+              <Seperator />
+
+                <TouchableOpacity
+                  onPress={() =>
+                    Linking.openURL(
+                      `https://www.youtube.com/watch?v=${trailerURl}`,
+                    )
+                  }
+                  style={{
+                    width: '90%',
+                    alignSelf: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 20,
+                    borderWidth: 5,
+                    borderColor: 'tomato',
+                    padding: 5,
+                    height:50,
+                    marginVertical:10,
+                    paddingHorizontal: 20,
+                  }}>
+                  <Icon name="logo-youtube" size={24} color="tomato" />
+                  <Text style={{fontWeight: 'bold', color: 'tomato',fontSize:16}}>
+                    {'   '}
+                    Watch Trailer{' '}
+                  </Text>
+                </TouchableOpacity>
+                <Seperator />
+                <FilmsRow title={'Recommendations'} filmId={route.params.filmId} />
+                <Seperator />
+
                 <Text
                   style={{
                     fontWeight: 'bold',
@@ -255,14 +364,14 @@ function FilmScreen({navigation,route}) {
                   }}>
                   Reviews · {reviewCount}
                 </Text>
-                
-             <View style={{marginBottom:150}}>
-             <FilmReviewContainer
-                filmId={film.id}
-                setReviewCount={setReviewCount}
-              />
-             </View>
-            
+
+                <View style={{marginBottom: 150}}>
+                  <FilmReviewContainer
+                    filmId={film.id}
+                    setReviewCount={setReviewCount}
+                  />
+                </View>
+              </View>
             </View>
           </View>
         </Animated.ScrollView>
@@ -270,11 +379,10 @@ function FilmScreen({navigation,route}) {
     </SafeAreaProvider>
   );
 }
-export default FilmScreen;
+export default connect(mapStateToProps)(FilmScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
   },
   text: {
     color: 'black',
